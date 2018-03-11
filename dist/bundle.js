@@ -25063,151 +25063,91 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Products = function Products(props) {
-  var products = props.products,
-      type = props.type;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  return _react2.default.createElement(
-    'div',
-    null,
-    _react2.default.createElement(
-      'form',
-      null,
-      _react2.default.createElement(
-        'h3',
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Products = function (_Component) {
+  _inherits(Products, _Component);
+
+  function Products() {
+    _classCallCheck(this, Products);
+
+    var _this = _possibleConstructorReturn(this, (Products.__proto__ || Object.getPrototypeOf(Products)).call(this));
+
+    _this.state = {
+      isSpecial: null
+    };
+    _this.onStatusChange = _this.onStatusChange.bind(_this);
+    return _this;
+  }
+
+  _createClass(Products, [{
+    key: 'onStatusChange',
+    value: function onStatusChange(event) {
+      console.log(event.target.value);
+      this.setState({ isSpecial: !event.target.value });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          products = _props.products,
+          type = _props.type;
+      var onStatusChange = this.onStatusChange;
+
+      return _react2.default.createElement(
+        'div',
         null,
-        type,
-        ' Products'
-      ),
-      _react2.default.createElement(
-        'select',
-        { className: 'form-control' },
         _react2.default.createElement(
-          'option',
+          'form',
           null,
-          '* Select Product *'
-        ),
-        products.map(function (product) {
-          return _react2.default.createElement(
-            'option',
-            { key: product.id },
-            product.name
-          );
-        })
-      ),
-      _react2.default.createElement(
-        'button',
-        { className: 'btn btn-primary' },
-        'Make Special'
-      )
-    )
-  );
-};
+          _react2.default.createElement(
+            'h3',
+            null,
+            type,
+            ' Products'
+          ),
+          _react2.default.createElement(
+            'select',
+            { className: 'form-control', onChange: onStatusChange },
+            _react2.default.createElement(
+              'option',
+              { value: null },
+              '* Select Product *'
+            ),
+            products.map(function (product) {
+              return _react2.default.createElement(
+                'option',
+                { key: product.id, value: product.id },
+                product.name
+              );
+            })
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-primary' },
+            'Make Special'
+          )
+        )
+      );
+    }
+  }]);
+
+  return Products;
+}(_react.Component);
 
 exports.default = Products;
-
-/*class Products extends Component {
-  constructor() {
-    super();
-    this.state = {
-      name: '',
-      isSpecial: null
-    }
-    this.onChangeStatus = this.onChangeStatus.bind(this)
-    this.setProduct = this.setProduct.bind(this)
-  }
-
-  setProduct(products, id) {
-    const product = products.find(prod => prod.id === id * 1)
-    // console.log(product)
-    if (product) {
-      console.log(product.isSpecial)
-      this.setState({
-        name: product.name,
-        isSpecial: !product.isSpecial
-      })
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // console.log(nextProps)
-    this.setProduct(nextProps.products, nextProps.id*1)
-  }
-
-  componentDidMount() {
-    console.log(this.props)
-    // this.setProduct()
-  }
-
-  onChangeStatus(ev) {
-    // console.log(ev.target.value)
-    this.setProduct(this.props.products, ev.target.value * 1)
-  }
-
-  updateProduct(event) {
-    event.preventDefault()
-
-  }
-
-  render() {
-    const { products } = this.props;
-    // console.log(products)
-    const { onChangeStatus } = this;
-    return (
-      <div>
-        <h2>We've got X special products.</h2>
-        <br />
-        <h3>Regular Products</h3>
-        <form>
-          <select value='' onChange={ onChangeStatus }>
-            <option>--Select Product--</option>
-            {
-              products.map(product => {
-                // console.log(product)
-                return (
-                !product.isSpecial ? (
-                <option key={product.id} value={product.id}>
-                  {product.name}
-                </option>
-                ) : (
-                  ''
-                )
-              )})
-            }
-          </select>
-          <button>Make Special</button>
-        </form>
-
-        <h3>Special Products</h3>
-        <form>
-          <select onChange={ onChangeStatus }>
-            <option>--Select Product--</option>
-            {
-              products.map(product => (
-                product.isSpecial ? (
-                <option key={product.id} value={product.id}>
-                  {product.name}
-                </option>
-                ) : (
-                  ''
-                )
-              ))
-            }
-          </select>
-          <button>Make Regular</button>
-        </form>
-      </div>
-    );
-  }
-}
-
-export default Products;*/
 
 /***/ })
 /******/ ]);

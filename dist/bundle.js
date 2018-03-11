@@ -20353,6 +20353,9 @@ var App = function (_Component) {
     _this.state = {
       products: []
     };
+    _this.countSpecial = _this.countSpecial.bind(_this);
+    _this.findSpecial = _this.findSpecial.bind(_this);
+    _this.findRegular = _this.findRegular.bind(_this);
     return _this;
   }
 
@@ -20361,19 +20364,44 @@ var App = function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      _axios2.default.get('./api/products').then(function (result) {
+      _axios2.default.get('/api/products').then(function (result) {
         return result.data;
       }).then(function (products) {
         return _this2.setState({ products: products });
       });
     }
-
-    // onUpdateProducts
-
+  }, {
+    key: 'countSpecial',
+    value: function countSpecial(products) {
+      return products.filter(function (product) {
+        return product.isSpecial;
+      }).length;
+    }
+  }, {
+    key: 'findSpecial',
+    value: function findSpecial(products) {
+      return products.filter(function (product) {
+        if (product.isSpecial) {
+          return product;
+        }
+      });
+    }
+  }, {
+    key: 'findRegular',
+    value: function findRegular(products) {
+      return products.filter(function (product) {
+        if (!product.isSpecial) {
+          return product;
+        }
+      });
+    }
   }, {
     key: 'render',
     value: function render() {
       var products = this.state.products;
+      var countSpecial = this.countSpecial,
+          findSpecial = this.findSpecial,
+          findRegular = this.findRegular;
 
       return _react2.default.createElement(
         _reactRouterDom.HashRouter,
@@ -20386,10 +20414,35 @@ var App = function (_Component) {
             null,
             'Acme Product Specials'
           ),
-          _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/products', component: function component(_ref) {
-              var match = _ref.match;
-              return _react2.default.createElement(_Products2.default, { products: products, id: match.params.id });
-            } })
+          _react2.default.createElement(
+            'h2',
+            null,
+            'We\'ve got ',
+            countSpecial(products),
+            ' special products'
+          ),
+          _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', render: function render(_ref) {
+              var match = _ref.match,
+                  location = _ref.location;
+              return _react2.default.createElement(_Products2.default, {
+                type: 'Regular',
+                products: findRegular(products),
+                match: match,
+                location: location
+              });
+            }
+          }),
+          _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', render: function render(_ref2) {
+              var match = _ref2.match,
+                  location = _ref2.location;
+              return _react2.default.createElement(_Products2.default, {
+                type: 'Special',
+                products: findSpecial(products),
+                match: match,
+                location: location
+              });
+            }
+          })
         )
       );
     }
@@ -25010,156 +25063,151 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var Products = function Products(props) {
+  var products = props.products,
+      type = props.type;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Products = function (_Component) {
-  _inherits(Products, _Component);
-
-  function Products() {
-    _classCallCheck(this, Products);
-
-    var _this = _possibleConstructorReturn(this, (Products.__proto__ || Object.getPrototypeOf(Products)).call(this));
-
-    _this.state = {
-      name: '',
-      isSpecial: null
-    };
-    _this.onChangeStatus = _this.onChangeStatus.bind(_this);
-    _this.setProduct = _this.setProduct.bind(_this);
-    return _this;
-  }
-
-  _createClass(Products, [{
-    key: 'setProduct',
-    value: function setProduct(products, id) {
-      var product = products.find(function (prod) {
-        return prod.id === id * 1;
-      });
-      // console.log(product)
-      if (product) {
-        console.log(product.isSpecial);
-        this.setState({
-          name: product.name,
-          isSpecial: !product.isSpecial
-        });
-      }
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      // console.log(nextProps)
-      this.setProduct(nextProps.products, nextProps.id * 1);
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      console.log(this.props);
-      // this.setProduct()
-    }
-  }, {
-    key: 'onChangeStatus',
-    value: function onChangeStatus(ev) {
-      // console.log(ev.target.value)
-      this.setProduct(this.props.products, ev.target.value * 1);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var products = this.props.products;
-      // console.log(products)
-
-      var onChangeStatus = this.onChangeStatus;
-
-      return _react2.default.createElement(
-        'div',
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(
+      'form',
+      null,
+      _react2.default.createElement(
+        'h3',
         null,
+        type,
+        ' Products'
+      ),
+      _react2.default.createElement(
+        'select',
+        { className: 'form-control' },
         _react2.default.createElement(
-          'h2',
+          'option',
           null,
-          'We\'ve got X special products.'
+          '* Select Product *'
         ),
-        _react2.default.createElement('br', null),
-        _react2.default.createElement(
-          'h3',
-          null,
-          'Regular Products'
-        ),
-        _react2.default.createElement(
-          'form',
-          null,
-          _react2.default.createElement(
-            'select',
-            { value: '', onChange: onChangeStatus },
-            _react2.default.createElement(
-              'option',
-              null,
-              '--Select Product--'
-            ),
-            products.map(function (product) {
-              // console.log(product)
-              return !product.isSpecial ? _react2.default.createElement(
-                'option',
-                { key: product.id, value: product.id },
-                product.name
-              ) : '';
-            })
-          ),
-          _react2.default.createElement(
-            'button',
-            null,
-            'Make Special'
-          )
-        ),
-        _react2.default.createElement(
-          'h3',
-          null,
-          'Special Products'
-        ),
-        _react2.default.createElement(
-          'form',
-          null,
-          _react2.default.createElement(
-            'select',
-            { onChange: onChangeStatus },
-            _react2.default.createElement(
-              'option',
-              null,
-              '--Select Product--'
-            ),
-            products.map(function (product) {
-              return product.isSpecial ? _react2.default.createElement(
-                'option',
-                { key: product.id, value: product.id },
-                product.name
-              ) : '';
-            })
-          ),
-          _react2.default.createElement(
-            'button',
-            null,
-            'Make Regular'
-          )
-        )
-      );
-    }
-  }]);
-
-  return Products;
-}(_react.Component);
+        products.map(function (product) {
+          return _react2.default.createElement(
+            'option',
+            { key: product.id },
+            product.name
+          );
+        })
+      ),
+      _react2.default.createElement(
+        'button',
+        { className: 'btn btn-primary' },
+        'Make Special'
+      )
+    )
+  );
+};
 
 exports.default = Products;
+
+/*class Products extends Component {
+  constructor() {
+    super();
+    this.state = {
+      name: '',
+      isSpecial: null
+    }
+    this.onChangeStatus = this.onChangeStatus.bind(this)
+    this.setProduct = this.setProduct.bind(this)
+  }
+
+  setProduct(products, id) {
+    const product = products.find(prod => prod.id === id * 1)
+    // console.log(product)
+    if (product) {
+      console.log(product.isSpecial)
+      this.setState({
+        name: product.name,
+        isSpecial: !product.isSpecial
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // console.log(nextProps)
+    this.setProduct(nextProps.products, nextProps.id*1)
+  }
+
+  componentDidMount() {
+    console.log(this.props)
+    // this.setProduct()
+  }
+
+  onChangeStatus(ev) {
+    // console.log(ev.target.value)
+    this.setProduct(this.props.products, ev.target.value * 1)
+  }
+
+  updateProduct(event) {
+    event.preventDefault()
+
+  }
+
+  render() {
+    const { products } = this.props;
+    // console.log(products)
+    const { onChangeStatus } = this;
+    return (
+      <div>
+        <h2>We've got X special products.</h2>
+        <br />
+        <h3>Regular Products</h3>
+        <form>
+          <select value='' onChange={ onChangeStatus }>
+            <option>--Select Product--</option>
+            {
+              products.map(product => {
+                // console.log(product)
+                return (
+                !product.isSpecial ? (
+                <option key={product.id} value={product.id}>
+                  {product.name}
+                </option>
+                ) : (
+                  ''
+                )
+              )})
+            }
+          </select>
+          <button>Make Special</button>
+        </form>
+
+        <h3>Special Products</h3>
+        <form>
+          <select onChange={ onChangeStatus }>
+            <option>--Select Product--</option>
+            {
+              products.map(product => (
+                product.isSpecial ? (
+                <option key={product.id} value={product.id}>
+                  {product.name}
+                </option>
+                ) : (
+                  ''
+                )
+              ))
+            }
+          </select>
+          <button>Make Regular</button>
+        </form>
+      </div>
+    );
+  }
+}
+
+export default Products;*/
 
 /***/ })
 /******/ ]);

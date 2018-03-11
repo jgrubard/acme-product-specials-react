@@ -1,6 +1,43 @@
 import React, { Component } from 'react';
 
-class Products extends Component {
+const Products = (props) => {
+  const { products, type } = props;
+    return (
+      <div>
+        <form>
+          <h3>{type} Products</h3>
+          <select className='form-control'>
+            <option>* Select Product *</option>
+            {
+              products.map(product => (
+                <option key={product.id}>
+                  {product.name}
+                </option>
+              ))
+            }
+          </select>
+          <button className='btn btn-primary'>
+            Make Special
+          </button>
+        </form>
+      </div>
+    );
+}
+
+export default Products;
+
+
+
+
+
+
+
+
+
+
+
+
+/*class Products extends Component {
   constructor() {
     super();
     this.state = {
@@ -36,6 +73,11 @@ class Products extends Component {
   onChangeStatus(ev) {
     // console.log(ev.target.value)
     this.setProduct(this.props.products, ev.target.value * 1)
+  }
+
+  updateProduct(event) {
+    event.preventDefault()
+
   }
 
   render() {
@@ -90,4 +132,4 @@ class Products extends Component {
   }
 }
 
-export default Products;
+export default Products;*/

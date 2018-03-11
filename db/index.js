@@ -7,9 +7,26 @@ const sync = () => {
 
 const seed = () => {
   return Promise.all([
-    Product.create({ name: 'helmet', isSpecial: false }),
-    Product.create({ name: 'wristguards', isSpecial: false  }),
-    Product.create({ name: 'hoverboard', isSpecial: true  })
+    Product.create({
+      name: 'automobile',
+      isSpecial: false
+    }),
+    Product.create({
+      name: 'motorcycle',
+      isSpecial: false
+    }),
+    Product.create({
+      name: 'hoverboard',
+      isSpecial: true
+    }),
+    Product.create({
+      name: 'speeder',
+      isSpecial: true
+    }),
+    Product.create({
+      name: 'unicycle',
+      isSpecial: true
+    }),
   ])
 }
 

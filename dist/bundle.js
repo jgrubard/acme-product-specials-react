@@ -20398,7 +20398,22 @@ var App = function (_Component) {
     }
   }, {
     key: 'onUpdateProduct',
-    value: function onUpdateProduct() {}
+    value: function onUpdateProduct(product) {
+      var _this3 = this;
+
+      _axios2.default.put('/api/products/' + product.id, product).then(function (result) {
+        return result.data;
+      }).then(function (product) {
+        var products = _this3.state.products.map(function (_product) {
+          if (_product.id === product.id * 1) {
+            return product;
+          }
+          return _product;
+        });
+        _this3.setState({ products: products });
+        document.location.hash = '/';
+      });
+    }
   }, {
     key: 'render',
     value: function render() {
@@ -20426,26 +20441,20 @@ var App = function (_Component) {
             countSpecial(products),
             ' special products'
           ),
-          _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', render: function render(_ref) {
-              var match = _ref.match,
-                  location = _ref.location;
+          _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', render: function render() {
               return _react2.default.createElement(_Products2.default, {
                 type: 'Regular',
+                swap: 'Special',
                 products: findRegular(products),
-                match: match,
-                location: location,
                 onUpdateProduct: onUpdateProduct
               });
             }
           }),
-          _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', render: function render(_ref2) {
-              var match = _ref2.match,
-                  location = _ref2.location;
+          _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', render: function render() {
               return _react2.default.createElement(_Products2.default, {
                 type: 'Special',
+                swap: 'Regular',
                 products: findSpecial(products),
-                match: match,
-                location: location,
                 onUpdateProduct: onUpdateProduct
               });
             }
@@ -25098,46 +25107,77 @@ var Products = function (_Component) {
       isSpecial: null
     };
     _this.onStatusChange = _this.onStatusChange.bind(_this);
-    _this.updateProduct = _this.updateProduct.bind(_this);
+    _this.setProduct = _this.setProduct.bind(_this);
+    // this.updateProduct = this.updateProduct.bind(this);
     return _this;
   }
 
   _createClass(Products, [{
+    key: 'setProduct',
+    value: function setProduct(products, id) {
+      var product = products.find(function (product) {
+        return product.id === id * 1;
+      });
+      if (product) {
+        this.setState({
+          id: product.id,
+          name: product.name,
+          isSpecial: !product.isSpecial
+        });
+      }
+    }
+
+    // componentDidMount() {
+    //   console.log(this.props)
+    // }
+
+  }, {
     key: 'onStatusChange',
     value: function onStatusChange(event) {
+      // let status;
+      // if(event.target.value === 'true') {
+      //   status = true;
+      // } else {
+      //   status = false;
+      // }
+      //  // = event.target.value == false;
+      // // console.log('onStatusChange:', status, !status);
+      // this.setState({ isSpecial: !status })
       // console.log(event.target.value)
       // console.log(this.props.products)
-      var product = this.props.products.find(function (product) {
-        console.log(product.id === event.target.value * 1);
-        return product.id === event.target.value * 1;
-      });
-
-      // console.log(!product.isSpecial)
-
-      this.setState({
-        id: product.id,
-        name: product.name,
-        isSpecial: !product.isSpecial
-      });
+      this.setProduct(this.props.products, event.target.value);
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      console.log('CDM:', this.props.products);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      console.log('NP:', nextProps.products);
     }
   }, {
     key: 'updateProduct',
     value: function updateProduct() {
+      // const product = this.state;
       event.preventDefault();
+      this.props.onUpdateProduct(this.state);
     }
   }, {
     key: 'render',
     value: function render() {
       var _props = this.props,
           products = _props.products,
-          type = _props.type;
+          type = _props.type,
+          swap = _props.swap;
       var onStatusChange = this.onStatusChange,
           updateProduct = this.updateProduct;
 
-
-      console.log(this.props);
+      // console.log(this.props)
 
       // console.log(this.state)
+
       return _react2.default.createElement(
         'div',
         null,
@@ -25169,7 +25209,8 @@ var Products = function (_Component) {
           _react2.default.createElement(
             'button',
             { className: 'btn btn-primary' },
-            'Make Special'
+            'Make ',
+            swap
           )
         )
       );

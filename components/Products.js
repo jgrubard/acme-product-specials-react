@@ -9,36 +9,65 @@ class Products extends Component {
       isSpecial: null
     }
     this.onStatusChange = this.onStatusChange.bind(this);
-    this.updateProduct = this.updateProduct.bind(this);
+    this.setProduct = this.setProduct.bind(this);
+    // this.updateProduct = this.updateProduct.bind(this);
   }
 
+
+  setProduct(products, id) {
+    const product = products.find(product => {
+      return product.id === id * 1;
+    })
+    if (product) {
+      this.setState({
+        id: product.id,
+        name: product.name,
+        isSpecial: !product.isSpecial
+      })
+    }
+  }
+
+  // componentDidMount() {
+  //   console.log(this.props)
+  // }
+
   onStatusChange(event) {
+    // let status;
+    // if(event.target.value === 'true') {
+    //   status = true;
+    // } else {
+    //   status = false;
+    // }
+    //  // = event.target.value == false;
+    // // console.log('onStatusChange:', status, !status);
+    // this.setState({ isSpecial: !status })
     // console.log(event.target.value)
     // console.log(this.props.products)
-    const product = this.props.products.find(product => {
-      console.log(product.id === event.target.value*1)
-      return product.id === event.target.value * 1;
-    })
+    this.setProduct(this.props.products, event.target.value);
 
-    // console.log(!product.isSpecial)
 
-    this.setState({
-      id: product.id,
-      name: product.name,
-      isSpecial: !product.isSpecial
-    })
+
+  }
+
+  componentDidMount() {
+    console.log('CDM:', this.props.products)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('NP:', nextProps.products);
   }
 
   updateProduct() {
+    // const product = this.state;
     event.preventDefault();
-
+    this.props.onUpdateProduct(this.state)
   }
 
   render() {
-    const { products, type } = this.props;
+    const { products, type, swap } = this.props;
     const { onStatusChange, updateProduct } = this;
 
-    console.log(this.props)
+    // console.log(this.props)
 
     // console.log(this.state)
     return (
@@ -56,7 +85,7 @@ class Products extends Component {
             }
           </select>
           <button className='btn btn-primary'>
-            Make Special
+            Make {swap}
           </button>
         </form>
       </div>

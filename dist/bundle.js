@@ -20356,6 +20356,7 @@ var App = function (_Component) {
     _this.countSpecial = _this.countSpecial.bind(_this);
     _this.findSpecial = _this.findSpecial.bind(_this);
     _this.findRegular = _this.findRegular.bind(_this);
+    _this.onUpdateProduct = _this.onUpdateProduct.bind(_this);
     return _this;
   }
 
@@ -20396,12 +20397,16 @@ var App = function (_Component) {
       });
     }
   }, {
+    key: 'onUpdateProduct',
+    value: function onUpdateProduct() {}
+  }, {
     key: 'render',
     value: function render() {
       var products = this.state.products;
       var countSpecial = this.countSpecial,
           findSpecial = this.findSpecial,
-          findRegular = this.findRegular;
+          findRegular = this.findRegular,
+          onUpdateProduct = this.onUpdateProduct;
 
       return _react2.default.createElement(
         _reactRouterDom.HashRouter,
@@ -20428,7 +20433,8 @@ var App = function (_Component) {
                 type: 'Regular',
                 products: findRegular(products),
                 match: match,
-                location: location
+                location: location,
+                onUpdateProduct: onUpdateProduct
               });
             }
           }),
@@ -20439,7 +20445,8 @@ var App = function (_Component) {
                 type: 'Special',
                 products: findSpecial(products),
                 match: match,
-                location: location
+                location: location,
+                onUpdateProduct: onUpdateProduct
               });
             }
           })
@@ -25086,17 +25093,37 @@ var Products = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Products.__proto__ || Object.getPrototypeOf(Products)).call(this));
 
     _this.state = {
+      id: '',
+      name: '',
       isSpecial: null
     };
     _this.onStatusChange = _this.onStatusChange.bind(_this);
+    _this.updateProduct = _this.updateProduct.bind(_this);
     return _this;
   }
 
   _createClass(Products, [{
     key: 'onStatusChange',
     value: function onStatusChange(event) {
-      console.log(event.target.value);
-      this.setState({ isSpecial: !event.target.value });
+      // console.log(event.target.value)
+      // console.log(this.props.products)
+      var product = this.props.products.find(function (product) {
+        console.log(product.id === event.target.value * 1);
+        return product.id === event.target.value * 1;
+      });
+
+      // console.log(!product.isSpecial)
+
+      this.setState({
+        id: product.id,
+        name: product.name,
+        isSpecial: !product.isSpecial
+      });
+    }
+  }, {
+    key: 'updateProduct',
+    value: function updateProduct() {
+      event.preventDefault();
     }
   }, {
     key: 'render',
@@ -25104,14 +25131,19 @@ var Products = function (_Component) {
       var _props = this.props,
           products = _props.products,
           type = _props.type;
-      var onStatusChange = this.onStatusChange;
+      var onStatusChange = this.onStatusChange,
+          updateProduct = this.updateProduct;
 
+
+      console.log(this.props);
+
+      // console.log(this.state)
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
           'form',
-          null,
+          { onSubmit: updateProduct },
           _react2.default.createElement(
             'h3',
             null,

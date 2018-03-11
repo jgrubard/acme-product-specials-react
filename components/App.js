@@ -13,6 +13,7 @@ class App extends Component {
     this.countSpecial = this.countSpecial.bind(this);
     this.findSpecial = this.findSpecial.bind(this);
     this.findRegular = this.findRegular.bind(this);
+    this.onUpdateProduct = this.onUpdateProduct.bind(this)
   }
 
   componentDidMount() {
@@ -43,9 +44,13 @@ class App extends Component {
     })
   }
 
+  onUpdateProduct() {
+
+  }
+
   render() {
     const { products } = this.state;
-    const { countSpecial, findSpecial, findRegular } = this;
+    const { countSpecial, findSpecial, findRegular, onUpdateProduct } = this;
     return (
       <Router>
         <div>
@@ -58,6 +63,7 @@ class App extends Component {
               products={ findRegular(products) }
               match={ match }
               location={ location }
+              onUpdateProduct = { onUpdateProduct }
             />
           )}
           />
@@ -68,6 +74,7 @@ class App extends Component {
               products={ findSpecial(products) }
               match={ match }
               location={ location }
+              onUpdateProduct = { onUpdateProduct }
             />
           )}
           />

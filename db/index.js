@@ -8,23 +8,31 @@ const sync = () => {
 const seed = () => {
   return Promise.all([
     Product.create({
-      name: 'automobile',
-      isSpecial: false
-    }),
-    Product.create({
-      name: 'motorcycle',
-      isSpecial: false
-    }),
-    Product.create({
-      name: 'hoverboard',
+      name: 'journal',
       isSpecial: true
     }),
     Product.create({
-      name: 'speeder',
+      name: 'locket',
       isSpecial: true
     }),
     Product.create({
-      name: 'unicycle',
+      name: 'ring',
+      isSpecial: true
+    }),
+    Product.create({
+      name: 'crown',
+      isSpecial: false
+    }),
+    Product.create({
+      name: 'snake',
+      isSpecial: false
+    }),
+    Product.create({
+      name: 'cup',
+      isSpecial: false
+    }),
+    Product.create({
+      name: 'the chosen one',
       isSpecial: true
     }),
   ])

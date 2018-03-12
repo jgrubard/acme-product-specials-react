@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter as Router, Route } from 'react-router-dom';
 import axios from 'axios';
-
 import Products from './Products.js';
 
 class App extends Component {
@@ -10,7 +8,6 @@ class App extends Component {
     this.state = {
       products: []
     }
-    this.countSpecial = this.countSpecial.bind(this);
     this.findSpecial = this.findSpecial.bind(this);
     this.findRegular = this.findRegular.bind(this);
     this.onUpdateProduct = this.onUpdateProduct.bind(this)
@@ -20,12 +17,6 @@ class App extends Component {
     axios.get('/api/products')
       .then((result) => result.data)
       .then(products => this.setState({ products }))
-  }
-
-  countSpecial(products) {
-    return products.filter(product => {
-      return product.isSpecial;
-    }).length;
   }
 
   findSpecial(products) {
@@ -45,7 +36,6 @@ class App extends Component {
   }
 
   onUpdateProduct(product) {
-    console.log(product)
     axios.put(`/api/products/${product.id}`, product)
       .then(result => result.data)
       .then(product => {
@@ -56,38 +46,18 @@ class App extends Component {
           return _product;
         })
         this.setState({ products });
-        // document.location.hash = '/';
       })
   }
 
   render() {
     const { products } = this.state;
-    const { countSpecial, findSpecial, findRegular, onUpdateProduct } = this;
+    const { findSpecial, findRegular, onUpdateProduct } = this;
     return (
-
-        <div>
-          <h1>Acme Product Specials</h1>
-          <h2>We've got { countSpecial(products) } special products</h2>
-
-
-            <Products
-              type='Regular'
-              swap='Special'
-              products={ findRegular(products) }
-              onUpdateProduct = { onUpdateProduct }
-            />
-
-            <Products
-              type='Special'
-              swap='Regular'
-              products={ findSpecial(products) }
-              onUpdateProduct = { onUpdateProduct }
-            />
-
-
-
-        </div>
-
+      <div>
+        <h1>Acme Product Specials React</h1>
+        <Products type='Regular' swap='Special' products={ findRegular(products) } onUpdateProduct = { onUpdateProduct } />
+        <Products type='Special' swap='Regular' products={ findSpecial(products) } onUpdateProduct = { onUpdateProduct } />
+      </div>
     );
   }
 }

@@ -45,6 +45,7 @@ class App extends Component {
   }
 
   onUpdateProduct(product) {
+    console.log(product)
     axios.put(`/api/products/${product.id}`, product)
       .then(result => result.data)
       .then(product => {
@@ -55,7 +56,7 @@ class App extends Component {
           return _product;
         })
         this.setState({ products });
-        document.location.hash = '/';
+        // document.location.hash = '/';
       })
   }
 
@@ -63,33 +64,30 @@ class App extends Component {
     const { products } = this.state;
     const { countSpecial, findSpecial, findRegular, onUpdateProduct } = this;
     return (
-      <Router>
+
         <div>
           <h1>Acme Product Specials</h1>
           <h2>We've got { countSpecial(products) } special products</h2>
 
-          <Route exact path='/' render={ () => (
+
             <Products
               type='Regular'
               swap='Special'
               products={ findRegular(products) }
               onUpdateProduct = { onUpdateProduct }
             />
-          )}
-          />
 
-          <Route exact path='/' render={ () => (
             <Products
               type='Special'
               swap='Regular'
               products={ findSpecial(products) }
               onUpdateProduct = { onUpdateProduct }
             />
-          )}
-          />
+
+
 
         </div>
-      </Router>
+
     );
   }
 }

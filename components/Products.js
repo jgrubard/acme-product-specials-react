@@ -5,74 +5,46 @@ class Products extends Component {
     super();
     this.state = {
       id: '',
-      name: '',
-      isSpecial: null
+      // name: '',
+      // isSpecial: null
     }
-    this.onStatusChange = this.onStatusChange.bind(this);
-    this.setProduct = this.setProduct.bind(this);
-    // this.updateProduct = this.updateProduct.bind(this);
+    this.onStatusChange = this.onStatusChange.bind(this)
+    // this.setProduct = this.setProduct.bind(this);
+    this.stopDefault = this.stopDefault.bind(this)
   }
 
-
-  setProduct(products, id) {
-    const product = products.find(product => {
-      return product.id === id * 1;
-    })
-    if (product) {
-      this.setState({
-        id: product.id,
-        name: product.name,
-        isSpecial: !product.isSpecial
-      })
-    }
-  }
-
-  // componentDidMount() {
-  //   console.log(this.props)
+  // setProduct(products, id) {
+  //   const product = products.find(product => product.id === id * 1);
+  //   if (product) {
+  //     this.setState({
+  //       id: id * 1,
+  //       name: product.name,
+  //       isSpecial: product.isSpecial
+  //     })
+  //   }
   // }
 
-  onStatusChange(event) {
-    // let status;
-    // if(event.target.value === 'true') {
-    //   status = true;
-    // } else {
-    //   status = false;
-    // }
-    //  // = event.target.value == false;
-    // // console.log('onStatusChange:', status, !status);
-    // this.setState({ isSpecial: !status })
-    // console.log(event.target.value)
-    // console.log(this.props.products)
-    this.setProduct(this.props.products, event.target.value);
-
-
-
-  }
-
-  componentDidMount() {
-    console.log('CDM:', this.props.products)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('NP:', nextProps.products);
-  }
-
-  updateProduct() {
-    // const product = this.state;
+  stopDefault(event) {
     event.preventDefault();
-    this.props.onUpdateProduct(this.state)
+  }
+
+
+
+  onStatusChange(event) {
+    // console.log(typeof event.target.value)
+    // console.log(this.props)
+    // this.setProduct(this.props.products, event.target.value)
+    this.setState({ id: event.target.value });
   }
 
   render() {
-    const { products, type, swap } = this.props;
-    const { onStatusChange, updateProduct } = this;
-
+    const { products, type, swap, onUpdateProduct } = this.props;
+    const { onStatusChange, stopDefault } = this;
     // console.log(this.props)
-
     // console.log(this.state)
     return (
       <div>
-        <form onSubmit={ updateProduct }>
+        <form onSubmit={ stopDefault }>
           <h3>{type} Products</h3>
           <select className='form-control' onChange={ onStatusChange }>
             <option value={null}>* Select Product *</option>
@@ -84,7 +56,7 @@ class Products extends Component {
               ))
             }
           </select>
-          <button className='btn btn-primary'>
+          <button className='btn btn-primary' onClick={ () => onUpdateProduct(this.state) }>
             Make {swap}
           </button>
         </form>

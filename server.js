@@ -23,7 +23,8 @@ app.get('/api/products', (req, res, next) => {
 app.put('/api/products/:id', (req, res, next) => {
   Product.findById(req.params.id)
     .then(product => {
-      Object.assign(product, req.body);
+      // Object.assign(product, req.body);
+      product.isSpecial = !product.isSpecial
       return product.save();
     })
     .then(product => res.json(product))

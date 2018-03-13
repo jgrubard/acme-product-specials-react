@@ -7,23 +7,19 @@ class Products extends Component {
       id: ''
     }
     this.onStatusChange = this.onStatusChange.bind(this)
-    this.stopDefault = this.stopDefault.bind(this)
-  }
-
-  stopDefault(event) {
-    event.preventDefault();
   }
 
   onStatusChange(event) {
+    event.preventDefault();
     this.setState({ id: event.target.value });
   }
 
   render() {
     const { products, type, swap, onUpdateProduct } = this.props;
-    const { onStatusChange, stopDefault } = this;
+    const { onStatusChange } = this;
     return (
       <div className='jumbotron'>
-        <form onSubmit={ stopDefault }>
+        <form onSubmit={ () => onUpdateProduct(this.state) }>
           <h3>
             We've got
             &nbsp;
@@ -33,9 +29,7 @@ class Products extends Component {
             &nbsp;
             <strong>
               {type} Product
-              <span>
-                { products.length === 1 ? '' : 's' }
-              </span>
+              <span>{ products.length === 1 ? '' : 's' }</span>
             </strong>
           </h3>
           <select className='form-control' onChange={ onStatusChange }>
@@ -48,7 +42,7 @@ class Products extends Component {
               ))
             }
           </select>
-          <button className='btn btn-primary' onClick={ () => onUpdateProduct(this.state) }>
+          <button className='btn btn-primary' disabled={!products.length}>
             Make {swap}
           </button>
         </form>
